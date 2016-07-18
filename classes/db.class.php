@@ -60,23 +60,13 @@ class DB {
     }
   }
 
-  // public function query($sql) {
-  //   return json_encode ( $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC) );
-  // }
-  //
-  // public function insert($sql, $arguments) {
-  //
-  // }
-}
+  public function select($tableName, $values) {
+    try {
+      $sql = "SELECT " . $values . " FROM " . $tableName;
 
-// if(isset($_GET['maps'])) {
-//   echo $db->query("SELECT * FROM maps");
-// } else if(isset($_GET['mapVariant'])) {
-//   try {
-//     $stmt = $db->conn->prepare("REPLACE INTO mapvariants VALUES (:id)");
-//     $stmt->bindParam(":id", $_GET['id']);
-//     $stmt->execute();
-//   } catch (PDOException $e) {
-//     echo $e->getMessage();
-//   }
-// }
+      return $this->conn->query($sql);
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+}
