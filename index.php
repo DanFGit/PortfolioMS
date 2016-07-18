@@ -17,6 +17,6 @@
     <title><?php echo $PMS->getHomeTitle(); ?></title>
   </head>
   <body>
-    
+
   </body>
 </html>

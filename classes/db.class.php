@@ -15,7 +15,7 @@ class DB {
       $this->conn = new PDO("mysql:host=" . $this->servername . ";dbname=" . $this->database, $this->username, $this->password);
       $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch(PDOException $e) {
-      echo $e->getMessage();
+      return $e->getMessage();
     }
   }
 
@@ -24,7 +24,39 @@ class DB {
     try {
       return ($this->conn->query("SHOW TABLES LIKE 'personal'")->rowCount()) > 0;
     } catch(PDOException $e) {
-      echo $e->getMessage();
+      return $e->getMessage();
+    }
+  }
+
+  public function createTable($tableName, $fields, $fieldMetaData) {
+    try {
+      $sql = "CREATE TABLE IF NOT EXISTS " . $tableName . " (";
+      foreach ($fields as $i => $field){
+        if($i > 0) $sql = $sql . ", ";
+        $sql = $sql . $field . " " . $fieldMetaData[$i];
+      }
+      $sql = $sql . ")";
+
+      $this->conn->exec($sql);
+      return 1;
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function insert($tableName, $values) {
+    try {
+      $sql = "INSERT INTO " . $tableName . " VALUES (";
+      foreach ($values as $i => $value){
+        if($i > 0) $sql = $sql . ", ";
+        $sql = $sql . "'" . $value . "'";
+      }
+      $sql = $sql . ")";
+
+      $this->conn->exec($sql);
+      return 1;
+    } catch(PDOException $e) {
+      return $e->getMessage();
     }
   }
 
