@@ -1,13 +1,6 @@
 <?php
-  session_start();
-
   require('classes/pms.class.php');
-
-  //Populate variables
   $PMS = new PMS();
-
-  $me = "current users's information";
-  $posts = ["array", "of", "posts"];
 ?>
 
 <!DOCTYPE html>
@@ -18,5 +11,12 @@
   </head>
   <body>
 
+    <?php if(!$PMS->isSetup()) { ?>
+      <p>PortfoliMS has not been setup yet. Please go to <a href="setup/">Setup</a> and follow the instructions.</p>
+    <?php exit; } ?>
+
+
+    <?php print_r($PMS->get("E-mail")); ?>
+    <?php print_r($PMS->get("test")); ?>
   </body>
 </html>

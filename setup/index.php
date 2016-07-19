@@ -129,9 +129,9 @@
 
       function setupPortfolio(){
         function parseResponse(){
-          if(this.status === 401){
-            alert(this.statusText);
-          } else if(this.status === 201) {
+          if(this.status != 201){
+            alert("Error " + this.status + ": " + this.responseText);
+          } else {
             document.getElementById("successMessage").style.display = "block";
           }
         }

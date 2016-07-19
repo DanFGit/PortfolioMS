@@ -20,6 +20,7 @@ class DB {
   }
 
   //Check if database has been setup
+  //TODO: Change from query() to exec() as exec() returns rowCount();
   public function isSetup() {
     try {
       return ($this->conn->query("SHOW TABLES LIKE 'personal'")->rowCount()) > 0;
@@ -60,11 +61,31 @@ class DB {
     }
   }
 
-  public function select($tableName, $values) {
+  public function select($tableName, $values = "*", $criteria = "true") {
     try {
-      $sql = "SELECT " . $values . " FROM " . $tableName;
+      $sql = "SELECT " . $values . " FROM " . $tableName . " WHERE " . $criteria;
 
-      return $this->conn->query($sql);
+      return $this->conn->query($sql, PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function update($tableName, $setValues, $criteria) {
+    try {
+      $sql = "UPDATE " . $tableName . " SET " . $setValues . " WHERE " . $criteria;
+
+      return $this->conn->exec($sql);
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+
+  public function delete($tableName, $criteria) {
+    try {
+      $sql = "DELETE FROM $tableName WHERE $criteria";
+
+      return $this->conn->exec($sql);
     } catch(PDOException $e) {
       return $e->getMessage();
     }
