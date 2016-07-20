@@ -8,6 +8,8 @@
     exit;
   }
 
+  if(!isset($_POST['adminDirectory'])) ThrowError("You shouldn't be here!");
+
   //--- DATABASE TABLE SETUP ---//
   $createPersonalTable = $DB->createTable("Personal", ["email", "password"], ["VARCHAR(255)", "VARCHAR(255)"]);
   if($createPersonalTable != 1) ThrowError("Could not create the 'Personal' table");
@@ -23,16 +25,16 @@
   //      default name for admin dir and tell the user to rename it manually
   //TODO: Instead of making a new directory, rename '/setup/admin' directory
   $adminDir = $_POST['adminDirectory'];
+  $restrictedDirs = ["setup", "classes", "css", "img", "js"];
 
   //Stop admin dashboard overwriting setup or classes folders
-  if($adminDir == "setup" || $adminDir == "classes") ThrowError("Illegal name used for Admin directory");
+  if(in_array(strtolower($adminDir), $restrictedDirs)) ThrowError("Illegal name used for Admin directory");
 
   //Stop admin directory overwriting an existing directory
   if (file_exists('../' . $adminDir) || is_dir('../' . $adminDir)) ThrowError("Admin directory already exists");
 
   //Make the admin directory
   mkdir('../' . $_POST['adminDirectory']);
-
 
   //--- USER ACCOUNT SETUP ---//
   //TODO: Don't store the password in plain text
@@ -42,7 +44,7 @@
   $insertPersonal = $DB->insert("Personal", [$userEmail, $userPassword]);
   if($insertPersonal != 1) ThrowError("Error: Could not insert data to the 'Personal' table");
 
-  $insertField = $DB->insert("Fields", [NULL, "E-mail", $userEmail]);
+  $insertField = $DB->insert("Fields", [NULL, "E-mail", $userEmail, "text"]);
   if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
 
   //Send a successful response
