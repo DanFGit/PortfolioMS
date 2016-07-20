@@ -39,8 +39,11 @@ class PMS {
   public function addAdminField($fieldName) {
     return $this->DB->insert("fields", [NULL, $fieldName, NULL]);
   }
-  public function removeAdminField($fieldName) {
-    return $this->DB->delete("fields", "name='$fieldName'");
+  public function removeAdminField($fieldID) {
+    return $this->DB->delete("fields", "id='$fieldID'");
+  }
+  public function updateAdminField($fieldID, $fieldValue) {
+    return $this->DB->update("fields", "value='$fieldValue'", "id='$fieldID'");
   }
 
 }

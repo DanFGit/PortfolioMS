@@ -13,21 +13,19 @@
     } else {
       $loginFailed = true;
     }
-  } else if(isset($_POST['updateField'])){
-    foreach ($_POST as $field => $value) {
-      if($field === "updateField") continue;
-      $PMS->update($field, $value);
-    }
-  } else if(isset($_POST['deleteField'])){
-    foreach ($_POST as $field => $value) {
-      if($field === "deleteField") continue;
-      $PMS->removeAdminField($field);
-    }
-  } else if(isset($_POST['addField'])){
-    $PMS->addAdminField($_POST['newField']);
   }
 
   $isLoggedIn = (isset($_SESSION['user'])) ? true : false;
+
+  if($isLoggedIn){
+    if(isset($_POST['updateField'])){
+      $PMS->updateAdminField($_POST['fieldID'], $_POST['fieldValue']);
+    } else if(isset($_POST['deleteField'])){
+      $PMS->removeAdminField($_POST['fieldID']);
+    } else if(isset($_POST['addField'])){
+      $PMS->addAdminField($_POST['newField']);
+    }
+  }
 
 ?>
 
@@ -55,9 +53,7 @@
 
     <?php } else { ?>
 
-      Welcome, <?php echo $_SESSION['user']; ?> | <a href="logout.php">Log out</a>
-      <br><br>
-
+      Welcome, <?php echo $_SESSION['user']; ?> | <a href="logout.php">Log out</a><br><br>
 
         <?php
         $fieldList = $PMS->getAdminFields();
@@ -65,7 +61,8 @@
         foreach ($fieldList as $key => $field) { ?>
           <form action="#" method="post">
             <label for="<?php echo $field['name']; ?>"><?php echo $field['name']; ?></label><br>
-            <input type="text" id="<?php echo $field['name']; ?>" name="<?php echo $field['name']; ?>" value="<?php echo $field['value']; ?>" />
+            <input type="hidden" id="fieldID" name="fieldID" value="<?php echo $field['id']; ?>" />
+            <input type="text" id="fieldValue" name="fieldValue" value="<?php echo $field['value']; ?>" />
             <input type="submit" value="Update Value" name="updateField" /><input type="submit" value="Delete" name="deleteField" /><br><br>
           </form>
         <?php } ?>
@@ -75,8 +72,6 @@
           <input type="text" id="newField" name="newField" />
           <input type="submit" value="Add New Field" name="addField" /><br><br>
         </form>
-
-
 
     <?php } ?>
 
