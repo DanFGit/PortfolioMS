@@ -5,16 +5,6 @@
 
   $PMS = new PMS();
 
-  //Check if login form has been submitted
-  if(isset($_POST['loginForm'])){
-    $login = $PMS->login($_POST['email'], $_POST['password']);
-    if($login[0]){
-      $_SESSION['user'] = $login[1];
-    } else {
-      $errors[] = "Incorrect email or password. Please try again.";
-    }
-  }
-
   //Stores if user is logged in
   $isLoggedIn = (isset($_SESSION['user'])) ? true : false;
 

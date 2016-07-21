@@ -1,37 +1,108 @@
 <?php
+  session_start();
+  require('../classes/pms.class.php');
+  $errors = [];
+
+  $PMS = new PMS();
+
+  //Stores if user is logged in
+  $isLoggedIn = (isset($_SESSION['user'])) ? true : false;
+
+  //If user is logged in, check if any forms have been submitted
   if($isLoggedIn){
-    if(isset($_POST['updateField'])){
-      $PMS->updateAdminField($_POST['fieldID'], $_POST['fieldValue']);
+    if(isset($_POST['createField'])){
+      $creationStatus = $PMS->createField($_POST['name'], $_POST['value'], $_POST['type']);
     } else if(isset($_POST['deleteField'])){
-      $PMS->removeAdminField($_POST['fieldID']);
-    } else if(isset($_POST['addField'])){
-      $PMS->addAdminField($_POST['newField'], $_POST['newFieldType']);
+      $deletionStatus = $PMS->deleteField($_POST['id']);
+    } else if(isset($_POST['updateField'])){
+      $updateStatus = $PMS->updateField($_POST['id'], $_POST['value']);
     }
   }
 ?>
 
-<h2>Field List</h2>
-<?php
-$fieldList = $PMS->getAdminFields();
-foreach ($fieldList as $key => $field) { ?>
-  <form action="#" method="post">
-    <label for="<?php echo $field['name']; ?>"><?php echo $field['name']; ?></label><br>
-    <input type="hidden" id="fieldID" name="fieldID" value="<?php echo $field['id']; ?>" />
-    <?php if($field['type'] == "text") { ?><input type="text" id="fieldValue" name="fieldValue" value="<?php echo $field['value']; ?>" /><?php } ?>
-    <?php if($field['type'] == "textarea") { ?><textarea rows="6" cols="100" id="fieldValue" name="fieldValue"><?php echo $field['value']; ?></textarea><br><?php } ?>
-    <input type="submit" value="Update" name="updateField" />
-    <input type="submit" value="Delete" name="deleteField" /><br><br>
-  </form>
-<?php } ?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard - PortfolioMS</title>
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <link href="css/master.css" rel="stylesheet">
+  </head>
+  <body>
+    <?php require('nav.php'); ?>
+    <?php if($isLoggedIn) { ?>
+      <main>
+        <?php if(isset($creationStatus) || isset($editStatus) || isset($deletionStatus)){ ?>
+          <section>
+            <?php
+            if(isset($creationStatus) && $creationStatus) {
+              echo "<p class='content success'>Field created successfully</p>";
+            } else if(isset($creationStatus) && !$creationStatus) {
+              echo "<p class='content error'>Field creation failed. Please try again with a different field name.</p>";
+            }
 
-<form action="#" method="post">
-  <h2>Add a new Field</h2>
-  <label for="newField">Field Name</label><br>
-  <input type="text" id="newField" name="newField" /><br><br>
-  <label for="newFieldType">Field Type</label><br>
-  <select id="newFieldType" name="newFieldType">
-    <option value="text" selected>Small Textbox</option>
-    <option value="textarea">Large Textarea</option>
-  </select><br><br>
-  <input type="submit" value="Add New Field" name="addField" /><br><br>
-</form>
+            if(isset($updateStatus) && $updateStatus) {
+              echo "<p class='content success'>Field updated successfully</p>";
+            } else if(isset($updateStatus) && !$updateStatus) {
+              echo "<p class='content error'>Field update failed. Please try again.</p>";
+            }
+
+            if(isset($deletionStatus) && $deletionStatus) {
+              echo "<p class='content success'>Field deleted successfully</p>";
+            } else if(isset($deletionStatus) && !$deletionStatus) {
+              echo "<p class='content error'>Field deletion failed. Please try again.</p>";
+            }
+            ?>
+          </section>
+        <?php } ?>
+
+        <section>
+          <h2>Field List</h2>
+          <div class="content">
+            <?php foreach($PMS->getAdminFields() as $field) { ?>
+              <div class="field">
+                <form action="#" method="POST">
+                  <input type="hidden" id="id" name="id" value="<?php echo $field['id']; ?>" />
+                  <label for="value"><?php echo $field['name']; ?></label><br>
+                  <?php if($field['type'] == "text") { ?><input type="text" id="value" name="value" value="<?php echo $field['value']; ?>" /><?php } ?>
+                  <?php if($field['type'] == "textarea") { ?><textarea rows="6" cols="100" id="value" name="value"><?php echo $field['value']; ?></textarea><?php } ?>
+                  <input type="submit" value="Update" name="updateField" />
+                  <input type="submit" value="Delete" name="deleteField" /><br><br>
+
+                </form>
+              </div>
+            <?php } ?>
+          </div>
+        </section>
+
+        <section>
+          <h2>Create New Field</h2>
+          <form class="content" action="#" method="POST">
+            <label for="name">Field Name</label><br>
+            <input type="text" name="name" /><br><br>
+
+            <label for="type">Field Type</label><br>
+            <select name="type">
+              <option value="text" selected>Small Textbox</option>
+              <option value="textarea">Large Textarea</option>
+            </select><br><br>
+
+            <label for="value">Field Value</label><br>
+            <input type="text" name="value" /><br><br>
+
+            <input type="submit" class="submit" value="Create Field" name="createField" />
+          </form>
+        </section>
+      </main>
+    <?php } else { ?>
+      <main>
+        <section>
+          <h2>Access Denied</h2>
+          <p class="content">
+            You must be logged in to access this area.
+          </p>
+        </section>
+      </main>
+    <?php } ?>
+  </body>
+</html>
