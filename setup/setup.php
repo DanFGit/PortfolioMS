@@ -45,5 +45,11 @@
   $insertField = $DB->insert("Fields", [NULL, "E-mail", $userEmail, "text"]);
   if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
 
+  $insertField = $DB->insert("Fields", [NULL, "Name", "Your Name Here", "text"]);
+  if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
+
+  $insertField = $DB->insert("Fields", [NULL, "About Me", "Use the Admin Dashboard to enter a little bit about you.", "textarea"]);
+  if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
+
   //Send a successful response
   header("HTTP/1.1 201 Created");
