@@ -10,9 +10,9 @@ To setup PortfolioMS, create a MySQL database then update *classes/db.class.php*
 
 ### Project Goals
 ##### Required
-1. Developers can create themes and simply use ``$PMS->get("fieldName")`` to access data controlled through the Admin Dashboard.
+1. ~~Developers can create themes and simply use ``$PMS->get("fieldName")`` to access data controlled through the Admin Dashboard.~~
 2. ``$PMS->getProjects()``, ``$PMS->getProjects(id)``, and ``$PMS->getProjects(id1, id2, ..., idN)`` can be used in themes to get all projects, a specific project, or multiple specific projects that have been created in the Admin Dashboard.
-3. The Admin Dashboard can be used to create new static fields (such as 'name' or 'about me'), which can then be used in themes by using ``$PMS->get()``.
+3. ~~The Admin Dashboard can be used to create new static fields (such as 'name' or 'about me'), which can then be used in themes by using ``$PMS->get()``.~~
 4. The Admin can create, edit, delete, hide, and re-order projects through their Dashboard.
 
 ##### Future

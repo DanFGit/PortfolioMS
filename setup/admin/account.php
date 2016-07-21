@@ -5,18 +5,9 @@
 
   $PMS = new PMS();
 
-  //Check if login form has been submitted
-  if(isset($_POST['loginForm'])){
-    $login = $PMS->login($_POST['email'], $_POST['password']);
-    if($login[0]){
-      $_SESSION['user'] = $login[1];
-    } else {
-      $errors[] = "Incorrect email or password. Please try again.";
-    }
-  }
-
   //Stores if user is logged in
   $isLoggedIn = (isset($_SESSION['user'])) ? true : false;
+
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +23,9 @@
     <?php if($isLoggedIn) { ?>
       <main>
         <section>
-          <h2>Admin Dashboard</h2>
+          <h2>Under Construction</h2>
           <p class="content">
-            Welcome to PortfolioMS! This section of your site is the hub of everything,
-            allowing you to control preferences, themes, project posts, and much more!
-            To get started, click one of the links in the navigation.
+            Admin will be able to change their email and password here.
           </p>
         </section>
       </main>

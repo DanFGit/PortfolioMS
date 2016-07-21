@@ -1,6 +1,4 @@
-<?php
-
-require('db.class.php');
+<?php require('db.class.php');
 
 class PMS {
 
@@ -10,42 +8,74 @@ class PMS {
     $this->DB = new DB();
   }
 
-  public function getHomeTitle() {
-    return "Homepage - Portfolio";
-  }
-
-  public function get($fieldName) {
-    return $this->DB->select("fields", "value", "name='$fieldName'")->fetch()['value'];
-  }
-
-  public function update($fieldName, $value) {
-    return $this->DB->update("fields", "value='$value'", "name='$fieldName'");
-  }
-
+  //TODO: Tables may be created but PMS setup fails - better to check if
+  //      table is populated rather than exists
   public function isSetup() {
     return $this->DB->isSetup();
   }
 
+  //TODO: Make controlable through DB
+  public function getHomeTitle() {
+    return "Homepage - Portfolio";
+  }
+
+  //TODO: Grab selected theme name from DB
+  public function getTheme() {
+    return "default";
+  }
+
+  //Alias function for 'getAdminField'
+  public function get($fieldName) {
+    return $this->getAdminField($fieldName);
+  }
+
+  //Checks the user login information is correct
+  //Returns 0 if not
   public function login($email, $password) {
     $storedUser = $this->DB->select("personal", "*", "email='$email'")->fetch();
-
     return array ( password_verify($password, $storedUser['password']), $storedUser['email'] );
   }
 
-  //Field Related Methods
+  //Field Related CRUD Methods (Create, Read, Update, Delete)
   public function getAdminFields() {
     return $this->DB->select("fields")->fetchAll();
   }
-  public function addAdminField($fieldName) {
-    return $this->DB->insert("fields", [NULL, $fieldName, NULL]);
+  public function addAdminField($fieldName, $fieldType) {
+    return $this->DB->insert("fields", [NULL, $fieldName, NULL, $fieldType]);
   }
-  public function removeAdminField($fieldID) {
-    return $this->DB->delete("fields", "id='$fieldID'");
+  public function getAdminField($fieldName) {
+    return nl2br($this->DB->select("fields", "value", "name='$fieldName'")->fetch()['value']);
   }
   public function updateAdminField($fieldID, $fieldValue) {
     return $this->DB->update("fields", "value='$fieldValue'", "id='$fieldID'");
   }
+  public function removeAdminField($fieldID) {
+    return $this->DB->delete("fields", "id='$fieldID'");
+  }
 
+  //Project Related CRUD Methods (Create, Read, Update, Delete)
+  public function getProject($id) {
+    return $this->DB->select("projects", "*", "id='$id'")->fetch();
+  }
+  public function getProjects() {
+    return $this->DB->select("projects", "*", "1=1 ORDER BY id DESC")->fetchAll();
+  }
+  public function getPublicProjects() {
+    return $this->DB->select("projects", "*", "visible='1' ORDER BY id DESC")->fetchAll();
+  }
+  public function createProject($title, $preview, $body, $visible) {
+    return $this->DB->insert("projects", [NULL, $title, $preview, $body, $visible]);
+  }
+  public function deleteProject($id) {
+    return $this->DB->delete("projects", "id='$id'");
+  }
+  public function hideProject($id) {
+    return $this->DB->update("projects", "visible=0", "id='$id'");
+  }
+  public function showProject($id) {
+    return $this->DB->update("projects", "visible=1", "id='$id'");
+  }
+  public function editProject($id, $title, $preview, $body, $visible) {
+    return $this->DB->update("projects", "title='$title', preview='$preview', body='$body', visible='$visible'", "id='$id'");
+  }
 }
-
- ?>

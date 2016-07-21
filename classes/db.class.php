@@ -57,7 +57,7 @@ class DB {
       $this->conn->exec($sql);
       return 1;
     } catch(PDOException $e) {
-      return $e->getMessage();
+      return 0;
     }
   }
 
