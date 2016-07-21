@@ -16,7 +16,7 @@
       <?php echo $PMS->get("About Me"); ?>
     </div>
 
-    <?php foreach($PMS->getProjects() as $project){ ?>
+    <?php foreach($PMS->getPublicProjects() as $project){ ?>
       <div class="content">
         <h2><?php echo $project['title']; ?></h2>
         <?php echo nl2br($project['preview']); ?>

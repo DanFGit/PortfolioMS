@@ -57,14 +57,14 @@ class DB {
       $this->conn->exec($sql);
       return 1;
     } catch(PDOException $e) {
-      return $e->getMessage();
+      return 0;
     }
   }
 
   public function select($tableName, $values = "*", $criteria = "true") {
     try {
       $sql = "SELECT " . $values . " FROM " . $tableName . " WHERE " . $criteria;
-      
+
       return $this->conn->query($sql, PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
       return $e->getMessage();

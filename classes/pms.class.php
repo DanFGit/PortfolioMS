@@ -57,13 +57,22 @@ class PMS {
   public function getProjects() {
     return $this->DB->select("projects", "*", "1=1 ORDER BY id DESC")->fetchAll();
   }
-  public function createProject($title, $preview, $body) {
-    return $this->DB->insert("projects", [NULL, $title, $preview, $body]);
+  public function getPublicProjects() {
+    return $this->DB->select("projects", "*", "visible='1' ORDER BY id DESC")->fetchAll();
+  }
+  public function createProject($title, $preview, $body, $visible) {
+    return $this->DB->insert("projects", [NULL, $title, $preview, $body, $visible]);
   }
   public function getProject($id) {
     return $this->DB->select("projects", "*", "id='$id'")->fetch();
   }
   public function deleteProject($id) {
     return $this->DB->delete("projects", "id='$id'");
+  }
+  public function hideProject($id) {
+    return $this->DB->update("projects", "visible=0", "id='$id'");
+  }
+  public function showProject($id) {
+    return $this->DB->update("projects", "visible=1", "id='$id'");
   }
 }
