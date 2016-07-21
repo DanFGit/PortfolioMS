@@ -14,15 +14,13 @@
   $createPersonalTable = $DB->createTable("Personal", ["email", "password"], ["VARCHAR(255)", "VARCHAR(255)"]);
   if($createPersonalTable != 1) ThrowError("Could not create the 'Personal' table");
 
-  $createProjectsTable = $DB->createTable("Projects", ["id", "title", "preview", "body"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT"]);
+  $createProjectsTable = $DB->createTable("Projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
   if($createProjectsTable != 1) ThrowError("Could not create the 'Projects' table");
 
-  $createFieldsTable = $DB->createTable("Fields", ["id", "name", "value"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT"]);
+  $createFieldsTable = $DB->createTable("Fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea')"]);
   if($createFieldsTable != 1) ThrowError("Could not create the 'Fields' table");
 
   //--- ADMIN DIRECTORY SETUP ---//
-  //TODO: Instead of breaking when using an illegal directory name, use a
-  //      default name for admin dir and tell the user to rename it manually
   //TODO: Instead of making a new directory, rename '/setup/admin' directory
   $adminDir = $_POST['adminDirectory'];
   $restrictedDirs = ["setup", "classes", "css", "img", "js"];
@@ -34,7 +32,7 @@
   if (file_exists('../' . $adminDir) || is_dir('../' . $adminDir)) ThrowError("Admin directory already exists");
 
   //Make the admin directory
-  mkdir('../' . $_POST['adminDirectory']);
+  rename('admin', '../' . $_POST['adminDirectory']);
 
   //--- USER ACCOUNT SETUP ---//
   //TODO: Don't store the password in plain text

@@ -25,7 +25,11 @@
         <section>
           <h2>Under Construction</h2>
           <p class="content">
-            Admin will be able to change their email and password here.
+            Admin will be able to change their theme and page title here, as
+            well as browse the theme browser and install them. Possibly have an
+            'enable developer mode' option that shows advanced options in the
+            navigation bar, letting developers modify themes directly from the
+            admin dashboard.
           </p>
         </section>
       </main>
