@@ -1,3 +1,5 @@
 /admin/*
-/js/*
-/img/*
+
+# Ignore all themes except default
+/themes/*
+!/themes/default

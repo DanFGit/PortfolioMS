@@ -11,7 +11,7 @@
   if(!isset($_POST['adminDirectory'])) ThrowError("You shouldn't be here!");
 
   //--- DATABASE TABLE SETUP ---//
-  $createPersonalTable = $DB->createTable("Personal", ["email", "password"], ["VARCHAR(255)", "VARCHAR(255)"]);
+  $createPersonalTable = $DB->createTable("Personal", ["email", "password", "theme"], ["VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)"]);
   if($createPersonalTable != 1) ThrowError("Could not create the 'Personal' table");
 
   $createProjectsTable = $DB->createTable("Projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
@@ -39,7 +39,7 @@
   $userEmail = $_POST['email'];
   $userPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-  $insertPersonal = $DB->insert("Personal", [$userEmail, $userPassword]);
+  $insertPersonal = $DB->insert("Personal", [$userEmail, $userPassword, NULL]);
   if($insertPersonal != 1) ThrowError("Error: Could not insert data to the 'Personal' table");
 
   $insertField = $DB->insert("Fields", [NULL, "E-mail", $userEmail, "text"]);

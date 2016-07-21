@@ -21,7 +21,10 @@ class PMS {
 
   //TODO: Grab selected theme name from DB
   public function getTheme() {
-    return "default";
+    return $this->DB->select("personal", "theme")->fetch()['theme'];
+  }
+  public function setTheme($name) {
+    return $this->DB->update("personal", "theme='$name'", "true");
   }
 
   //Alias function for 'getAdminField'
