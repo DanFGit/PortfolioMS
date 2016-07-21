@@ -1,0 +1,10 @@
+{
+  "name": "PortfolioMS Default",
+  "author": "PortfolioMS",
+  "website": "https://github.com/DanFGit/PortfolioMS/tree/master/themes/default",
+
+  "fields": {
+    "Name": "text",
+    "About Me": "textarea"
+  }
+}

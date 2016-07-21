@@ -23,7 +23,15 @@ class DB {
   //TODO: Change from query() to exec() as exec() returns rowCount();
   public function isSetup() {
     try {
-      return ($this->conn->query("SHOW TABLES LIKE 'personal'")->rowCount()) > 0;
+      $isSetup = 0;
+
+      if($this->conn->query("SHOW TABLES LIKE 'fields'")->rowCount() > 0){
+        if($this->conn->query("SELECT * FROM fields")->rowCount() > 0){
+          $isSetup = 1;
+        }
+      }
+
+      return $isSetup;
     } catch(PDOException $e) {
       return $e->getMessage();
     }
