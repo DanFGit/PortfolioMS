@@ -38,30 +38,56 @@ class PMS {
 
   //Field Related CRUD Methods (Create, Read, Update, Delete)
   public function getAdminFields() {
-    return $this->DB->select("fields")->fetchAll();
-  }
-  public function addAdminField($fieldName, $fieldType) {
-    return $this->DB->insert("fields", [NULL, $fieldName, NULL, $fieldType]);
+    $query = $this->DB->select("fields");
+
+    if($query->rowCount()) {
+      return $query->fetchAll();
+    } else {
+      return [];
+    }
   }
   public function getAdminField($fieldName) {
-    return nl2br($this->DB->select("fields", "value", "name='$fieldName'")->fetch()['value']);
+    $query = $this->DB->select("fields", "value", "name='$fieldName'");
+
+    if($query->rowCount()) {
+      return nl2br($query->fetch()['value']);
+    }
   }
-  public function updateAdminField($fieldID, $fieldValue) {
+  public function createField($fieldName, $fieldValue, $fieldType) {
+    return $this->DB->insert("fields", [NULL, $fieldName, $fieldValue, $fieldType]);
+  }
+  public function updateField($fieldID, $fieldValue) {
     return $this->DB->update("fields", "value='$fieldValue'", "id='$fieldID'");
   }
-  public function removeAdminField($fieldID) {
+  public function deleteField($fieldID) {
     return $this->DB->delete("fields", "id='$fieldID'");
   }
 
   //Project Related CRUD Methods (Create, Read, Update, Delete)
   public function getProject($id) {
-    return $this->DB->select("projects", "*", "id='$id'")->fetch();
+    $query = $this->DB->select("projects", "*", "id='$id'");
+
+    if($query->rowCount()) {
+      return $query->fetch();
+    }
   }
   public function getProjects() {
-    return $this->DB->select("projects", "*", "1=1 ORDER BY id DESC")->fetchAll();
+    $query = $this->DB->select("projects", "*", "1=1 ORDER BY id DESC");
+
+    if($query->rowCount()) {
+      return $query->fetchAll();
+    } else {
+      return [];
+    }
   }
   public function getPublicProjects() {
-    return $this->DB->select("projects", "*", "visible='1' ORDER BY id DESC")->fetchAll();
+    $query = $this->DB->select("projects", "*", "visible='1' ORDER BY id DESC");
+
+    if($query->rowCount()) {
+      return $query->fetchAll();
+    } else {
+      return [];
+    }
   }
   public function createProject($title, $preview, $body, $visible) {
     return $this->DB->insert("projects", [NULL, $title, $preview, $body, $visible]);
