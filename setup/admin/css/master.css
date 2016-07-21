@@ -1,0 +1,160 @@
+* {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+html {
+  font: 12px 'Titillium Web', sans-serif;
+}
+body {
+  background: #eee;
+}
+a {
+  text-decoration: none;
+}
+
+
+nav {
+  position: fixed;
+  background: #112;
+  color: #fff;
+  height: 100vh;
+  width: 200px;
+  border-right: 1px solid #000;
+}
+#logo a {
+  color: #2196F3;
+}
+#logo sup {
+  font-size: .5em;
+}
+#logo {
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 4px;
+}
+.navSection {
+  margin: 5px;
+  border-radius: 3px;
+  background: #26263d;
+  padding: 5px;
+}
+.navSection a:hover {
+  background: rgba(255,255,255,.1);
+}
+.navSection a {
+  display: block;
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+.loginForm .loginInput {
+  background: #112;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  width: 100%;
+  height: 22px;
+  color: #fff;
+  font-family: inherit;
+  padding: 0 6px;
+  margin-bottom: 4px;
+}
+.loginForm .loginSubmit {
+  border: none;
+  background: #2196F3;
+  color: #fff;
+  font-family: inherit;
+  width: 100%;
+  border-radius: 3px;
+  margin-top: 6px;
+}
+.loginForm label {
+  margin-left: 4px;
+}
+.welcome {
+  margin-left: 4px;
+}
+
+main {
+  position: fixed;
+  left: 200px;
+  height: 100vh;
+  width: calc(100vw - 200px);
+  overflow-y: scroll;
+}
+main > section {
+  margin: 15px;
+}
+main > section > h2 {
+  padding: 3px 7px;
+  background: #112;
+  color: #2196F3;
+}
+main > section > .content > a {
+  color: #112;
+}
+main > section > .content {
+  padding: 7px;
+  background: #fff;
+  font-size: 1.2rem;
+}
+main > section > .content.success {
+    background: #7f8;
+}
+main > section > .content.error {
+    background: #f88;
+}
+
+.project {
+  border-bottom: #ddd 1px solid;
+  padding: 6px 0;
+  display: block;
+}
+.project:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.project:first-of-type {
+  padding-top: 0;
+}
+.project a.button {
+  background: #112;
+  color: #fff;
+  padding: 0 4px;
+  min-width: 43px;
+  display: inline-block;
+  text-align: center;
+}
+.project .title {
+  font-size: 1.3rem;
+  margin-left: 10px;
+  font-weight: bold;
+}
+.project.hidden {
+  opacity: 0.3;
+}
+main > section > form textarea {
+font-family: inherit;
+    width: 100%;
+    padding: 0 4px;
+}
+main > section > form input {
+    font-family: inherit;
+    width: 100%;
+    padding: 0 3px;
+    height: 2.5rem;
+}
+main > section > form input.submit {
+  border: none;
+  background: #2196F3;
+  color: #fff;
+  font-size: 1.5rem;
+}
+main > section > form input.checkbox {
+  width: 26px;
+  padding: 0;
+  height: 25px;
+  margin: 0;
+  vertical-align: bottom;
+}

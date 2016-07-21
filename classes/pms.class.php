@@ -54,6 +54,9 @@ class PMS {
   }
 
   //Project Related CRUD Methods (Create, Read, Update, Delete)
+  public function getProject($id) {
+    return $this->DB->select("projects", "*", "id='$id'")->fetch();
+  }
   public function getProjects() {
     return $this->DB->select("projects", "*", "1=1 ORDER BY id DESC")->fetchAll();
   }
@@ -63,9 +66,6 @@ class PMS {
   public function createProject($title, $preview, $body, $visible) {
     return $this->DB->insert("projects", [NULL, $title, $preview, $body, $visible]);
   }
-  public function getProject($id) {
-    return $this->DB->select("projects", "*", "id='$id'")->fetch();
-  }
   public function deleteProject($id) {
     return $this->DB->delete("projects", "id='$id'");
   }
@@ -74,5 +74,8 @@ class PMS {
   }
   public function showProject($id) {
     return $this->DB->update("projects", "visible=1", "id='$id'");
+  }
+  public function editProject($id, $title, $preview, $body, $visible) {
+    return $this->DB->update("projects", "title='$title', preview='$preview', body='$body', visible='$visible'", "id='$id'");
   }
 }

@@ -1,79 +1,54 @@
 <?php
   session_start();
   require('../classes/pms.class.php');
+  $errors = [];
 
   $PMS = new PMS();
 
+  //Check if login form has been submitted
   if(isset($_POST['loginForm'])){
-    // echo $PMS->login($_POST['email'], $_POST['password']);
-    $login = $PMS->login($_POST['loginEmail'], $_POST['loginPassword']);
+    $login = $PMS->login($_POST['email'], $_POST['password']);
     if($login[0]){
-      //TODO: Use username from database rather than form submitted username
       $_SESSION['user'] = $login[1];
     } else {
-      $loginFailed = true;
+      $errors[] = "Incorrect email or password. Please try again.";
     }
   }
 
+  //Stores if user is logged in
   $isLoggedIn = (isset($_SESSION['user'])) ? true : false;
-
-  if($isLoggedIn){
-    if(isset($_POST['updateField'])){
-      $PMS->updateAdminField($_POST['fieldID'], $_POST['fieldValue']);
-    } else if(isset($_POST['deleteField'])){
-      $PMS->removeAdminField($_POST['fieldID']);
-    } else if(isset($_POST['addField'])){
-      $PMS->addAdminField($_POST['newField']);
-    }
-  }
-
 ?>
 
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Admin CP</title>
+    <title>Admin Dashboard - PortfolioMS</title>
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <link href="css/master.css" rel="stylesheet">
   </head>
   <body>
-    <?php if(!$isLoggedIn) { ?>
-      <?php if(isset($loginFailed)){
-        echo "login failed";
-      } ?>
-
-      <form action="#" method="post">
-        <label for="loginEmail">Email</label>
-        <input required type="text" id="loginEmail" name="loginEmail" />
-        <br><br>
-        <label for="loginPassword">Password</label>
-        <input required type="password" id="loginPassword" name="loginPassword" />
-        <br><br>
-        <input type="submit" value="Log In" name="loginForm"/>
-      </form>
-
+    <?php require('nav.php'); ?>
+    <?php if($isLoggedIn) { ?>
+      <main>
+        <section>
+          <h2>Admin Dashboard</h2>
+          <p class="content">
+            Welcome to PortfolioMS! This section of your site is the hub of everything,
+            allowing you to control preferences, themes, project posts, and much more!
+            To get started, click one of the links in the navigation.
+          </p>
+        </section>
+      </main>
     <?php } else { ?>
-
-      Welcome, <?php echo $_SESSION['user']; ?> | <a href="logout.php">Log out</a><br><br>
-
-        <?php
-        $fieldList = $PMS->getAdminFields();
-
-        foreach ($fieldList as $key => $field) { ?>
-          <form action="#" method="post">
-            <label for="<?php echo $field['name']; ?>"><?php echo $field['name']; ?></label><br>
-            <input type="hidden" id="fieldID" name="fieldID" value="<?php echo $field['id']; ?>" />
-            <input type="text" id="fieldValue" name="fieldValue" value="<?php echo $field['value']; ?>" />
-            <input type="submit" value="Update Value" name="updateField" /><input type="submit" value="Delete" name="deleteField" /><br><br>
-          </form>
-        <?php } ?>
-
-        <form action="#" method="post">
-          <label for="newField">Add New Field</label><br>
-          <input type="text" id="newField" name="newField" />
-          <input type="submit" value="Add New Field" name="addField" /><br><br>
-        </form>
-
+      <main>
+        <section>
+          <h2>Access Denied</h2>
+          <p class="content">
+            You must be logged in to access this area.
+          </p>
+        </section>
+      </main>
     <?php } ?>
-
   </body>
 </html>
