@@ -15,7 +15,6 @@
     } else if(isset($_GET['delete'])){
       $deletionStatus = $PMS->deleteProject($_GET['delete']);
     } else if(isset($_POST['editProject'])){
-      //TODO: Create PMS->editProject($id, $title, $preview, $body)
       $editStatus = $PMS->editProject($_GET['edit'], $_POST['title'], $_POST['preview'], $_POST['body'], isset($_POST['visible']));
     } else if(isset($_GET['hide'])){
       $hideStatus = $PMS->hideProject($_GET['hide']);

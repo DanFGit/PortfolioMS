@@ -69,11 +69,47 @@ class DB {
     }
   }
 
+  //Sanitises inputs as opposed to insert()
+  //TODO: Move all INSERT queries to this function
+  public function insertSecure($tableName, $values) {
+    try {
+      $sql = "INSERT INTO $tableName VALUES (";
+      foreach($values as $i => $value) {
+        if($i > 0) $sql = $sql . ", ";
+        $sql = $sql . "?";
+      }
+      $sql = $sql . ")";
+
+      $stmt = $this->conn->prepare($sql);
+      foreach($values as $i => $value){
+        $stmt->bindValue($i + 1, $value);
+      }
+      return $stmt->execute();
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+
   public function select($tableName, $values = "*", $criteria = "true") {
     try {
       $sql = "SELECT " . $values . " FROM " . $tableName . " WHERE " . $criteria;
 
       return $this->conn->query($sql, PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+      return $e->getMessage();
+    }
+  }
+
+  //Sanitises inputs as opposed to update()
+  //TODO: Move all UPDATE queries to this function
+  public function updateSecure($tableName, $set, $values, $criteria = "true") {
+    try {
+      $sql = "UPDATE $tableName SET $set WHERE $criteria";
+      $stmt = $this->conn->prepare($sql);
+      foreach($values as $i => $value){
+        $stmt->bindValue($i + 1, $value);
+      }
+      return $stmt->execute();
     } catch(PDOException $e) {
       return $e->getMessage();
     }

@@ -93,7 +93,7 @@ class PMS {
     }
   }
   public function createProject($title, $preview, $body, $visible) {
-    return $this->DB->insert("projects", [NULL, $title, $preview, $body, $visible]);
+    return $this->DB->insertSecure("projects", [NULL, $title, $preview, $body, $visible]);
   }
   public function deleteProject($id) {
     return $this->DB->delete("projects", "id='$id'");
@@ -105,6 +105,6 @@ class PMS {
     return $this->DB->update("projects", "visible=1", "id='$id'");
   }
   public function editProject($id, $title, $preview, $body, $visible) {
-    return $this->DB->update("projects", "title='$title', preview='$preview', body='$body', visible='$visible'", "id='$id'");
+    return $this->DB->updateSecure("projects", "title=?, preview=?, body=?, visible=?", [$title, $preview, $body, $visible], "id='$id'");
   }
 }
