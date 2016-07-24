@@ -15,6 +15,16 @@
     } else if(isset($_POST['deleteField'])){
       $deletionStatus = $PMS->deleteField($_POST['id']);
     } else if(isset($_POST['updateField'])){
+      if($_POST['type'] == 'array'){
+        foreach ($_POST['value'] as $i => $value) {
+          if($value == '') unset($_POST['value'][$i]);
+        }
+        $_POST['value'] = json_encode($_POST['value']);
+      }
+      $updateStatus = $PMS->updateField($_POST['id'], $_POST['value']);
+    } else if(isset($_POST['addFieldArray'])){
+      $_POST['value'][] = "";
+      $_POST['value'] = json_encode($_POST['value']);
       $updateStatus = $PMS->updateField($_POST['id'], $_POST['value']);
     }
   }
@@ -63,9 +73,20 @@
               <div class="field">
                 <form action="#" method="POST">
                   <input type="hidden" id="id" name="id" value="<?php echo $field['id']; ?>" />
+                  <input type="hidden" id="type" name="type" value="<?php echo $field['type']; ?>" />
                   <label for="value"><?php echo $field['name']; ?></label><br>
                   <?php if($field['type'] == "text") { ?><input type="text" id="value" name="value" value="<?php echo $field['value']; ?>" /><?php } ?>
                   <?php if($field['type'] == "textarea") { ?><textarea rows="6" cols="100" id="value" name="value"><?php echo $field['value']; ?></textarea><?php } ?>
+                  <?php if($field['type'] == "array") {
+                    $values = json_decode($field['value']);
+
+                    foreach ($values as $i => $value) { ?>
+                      <input type="text" id="value" name="value[]" value="<?php echo $value; ?>" /><br>
+                    <?php } ?>
+
+                    <br><input type="submit" value="Add New Element" name="addFieldArray" /><br><br>
+
+                  <?php } ?>
                   <input type="submit" value="Update" name="updateField" />
                   <input type="submit" value="Delete" name="deleteField" /><br><br>
 
@@ -85,6 +106,7 @@
             <select name="type">
               <option value="text" selected>Small Textbox</option>
               <option value="textarea">Large Textarea</option>
+              <option value="array">Array/List</option>
             </select><br><br>
 
             <label for="value">Field Value</label><br>

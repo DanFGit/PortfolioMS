@@ -57,7 +57,12 @@ class PMS {
     }
   }
   public function createField($fieldName, $fieldValue, $fieldType) {
-    return $this->DB->insert("fields", [NULL, $fieldName, $fieldValue, $fieldType]);
+    if($fieldType == "array"){
+      $insertValue = json_encode(array($fieldValue));
+    } else {
+      $insertValue = $fieldValue;
+    }
+    return $this->DB->insert("fields", [NULL, $fieldName, $insertValue, $fieldType]);
   }
   public function updateField($fieldID, $fieldValue) {
     return $this->DB->update("fields", "value='$fieldValue'", "id='$fieldID'");

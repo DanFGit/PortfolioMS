@@ -17,7 +17,7 @@
   $createProjectsTable = $DB->createTable("Projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
   if($createProjectsTable != 1) ThrowError("Could not create the 'Projects' table");
 
-  $createFieldsTable = $DB->createTable("Fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea')"]);
+  $createFieldsTable = $DB->createTable("Fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea','array')"]);
   if($createFieldsTable != 1) ThrowError("Could not create the 'Fields' table");
 
   //--- ADMIN DIRECTORY SETUP ---//
