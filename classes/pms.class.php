@@ -58,7 +58,8 @@ class PMS {
   }
   public function createField($fieldName, $fieldValue, $fieldType) {
     if($fieldType == "array"){
-      $insertValue = json_encode(array($fieldValue));
+      if(!is_array($fieldValue)) $fieldValue = array($fieldValue);
+      $insertValue = json_encode($fieldValue);
     } else {
       $insertValue = $fieldValue;
     }
@@ -77,6 +78,8 @@ class PMS {
 
     if($query->rowCount()) {
       return $query->fetch();
+    } else {
+      return [];
     }
   }
   public function getProjects() {

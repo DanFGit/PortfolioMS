@@ -25,8 +25,8 @@ class DB {
     try {
       $isSetup = 0;
 
-      if($this->conn->query("SHOW TABLES LIKE 'fields'")->rowCount() > 0){
-        if($this->conn->query("SELECT * FROM fields")->rowCount() > 0){
+      if($this->conn->query("SHOW TABLES LIKE 'personal'")->rowCount() > 0){
+        if($this->conn->query("SELECT * FROM personal")->rowCount() > 0){
           $isSetup = 1;
         }
       }

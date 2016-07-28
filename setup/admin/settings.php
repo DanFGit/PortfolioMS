@@ -10,6 +10,14 @@
 
   if($isLoggedIn){
     if(isset($_POST['selectTheme'])){
+      $themeDetails = json_decode(file_get_contents('../themes/' . $_POST['selected'] . '/theme.json'));
+    } else if(isset($_POST['setTheme'])){
+      foreach ($_POST['fields'] as $fieldType => $fieldsOfType) {
+        if(substr($fieldType, 0, 5) == "array") $fieldType = "array";
+        foreach ($fieldsOfType as $fieldName => $fieldValue) {
+          $PMS->createField($fieldName, $fieldValue, $fieldType);
+        }
+      }
       $PMS->setTheme($_POST['selected']);
     }
   }
@@ -28,16 +36,26 @@
     <?php require('nav.php'); ?>
     <?php if($isLoggedIn) { ?>
       <main>
-        <section>
-          <h2>Under Construction</h2>
-          <p class="content">
-            Admin will be able to change their theme and page title here, as
-            well as browse the theme browser and install them. Possibly have an
-            'enable developer mode' option that shows advanced options in the
-            navigation bar, letting developers modify themes directly from the
-            admin dashboard.
-          </p>
-        </section>
+        <?php if(isset($themeDetails)){ ?>
+          <section>
+            <h2><?php echo $themeDetails->name; ?></h2>
+            <form method="post" action="#" class="content">
+              <?php foreach ($themeDetails->fields as $fieldName => $fieldType) { ?>
+                  <label><?php echo $fieldName; ?></label>
+                  <?php if($fieldType == "text") { ?><input type="text" id="value" name="fields[<?php echo $fieldType; ?>][<?php echo $fieldName; ?>]" /><?php } ?>
+                  <?php if($fieldType == "textarea") { ?><textarea rows="6" cols="100" id="value" name="fields[<?php echo $fieldType; ?>][<?php echo $fieldName; ?>]"></textarea><?php } ?>
+                  <?php if(substr($fieldType, 0, 5) == "array") {
+                    $numInArray = explode("-", $fieldType)[1];
+                    for($i = 0; $i < $numInArray; $i++) {?>
+                      <input type="text" id="value" name="fields[<?php echo $fieldType; ?>][<?php echo $fieldName; ?>][]" />
+                  <?php } } ?>
+                  <br><br>
+              <?php } ?>
+              <input type="hidden" name="selected" value="<?php echo $_POST['selected']; ?>">
+              <input class="submit" type="submit" name="setTheme" value="Save Theme">
+            </form>
+          </section>
+        <?php } ?>
 
         <section>
           <h2>Theme Selection</h2>
