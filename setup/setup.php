@@ -11,17 +11,16 @@
   if(!isset($_POST['adminDirectory'])) ThrowError("You shouldn't be here!");
 
   //--- DATABASE TABLE SETUP ---//
-  $createPersonalTable = $DB->createTable("Personal", ["email", "password", "theme"], ["VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)"]);
-  if($createPersonalTable != 1) ThrowError("Could not create the 'Personal' table");
+  $createPersonalTable = $DB->createTable("personal", ["email", "password", "theme"], ["VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)"]);
+  if($createPersonalTable != 1) ThrowError("Could not create the 'personal' table");
 
-  $createProjectsTable = $DB->createTable("Projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
-  if($createProjectsTable != 1) ThrowError("Could not create the 'Projects' table");
+  $createProjectsTable = $DB->createTable("projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
+  if($createProjectsTable != 1) ThrowError("Could not create the 'projects' table");
 
-  $createFieldsTable = $DB->createTable("Fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea','array')"]);
-  if($createFieldsTable != 1) ThrowError("Could not create the 'Fields' table");
+  $createFieldsTable = $DB->createTable("fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea','array')"]);
+  if($createFieldsTable != 1) ThrowError("Could not create the 'fields' table");
 
   //--- ADMIN DIRECTORY SETUP ---//
-  //TODO: Instead of making a new directory, rename '/setup/admin' directory
   $adminDir = $_POST['adminDirectory'];
   $restrictedDirs = ["setup", "classes", "css", "img", "js"];
 
@@ -35,21 +34,20 @@
   rename('admin', '../' . $_POST['adminDirectory']);
 
   //--- USER ACCOUNT SETUP ---//
-  //TODO: Don't store the password in plain text
   $userEmail = $_POST['email'];
   $userPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-  $insertPersonal = $DB->insert("Personal", [$userEmail, $userPassword, NULL]);
-  if($insertPersonal != 1) ThrowError("Error: Could not insert data to the 'Personal' table");
+  $insertPersonal = $DB->insert("personal", [$userEmail, $userPassword, NULL]);
+  if($insertPersonal != 1) ThrowError("Error: Could not insert data to the 'personal' table");
 
-  $insertField = $DB->insert("Fields", [NULL, "E-mail", $userEmail, "text"]);
-  if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
+  $insertField = $DB->insert("fields", [NULL, "E-mail", $userEmail, "text"]);
+  if($insertField != 1) ThrowError("Error: Could not insert data to the 'fields' table");
 
-  $insertField = $DB->insert("Fields", [NULL, "Name", "Your Name Here", "text"]);
-  if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
+  $insertField = $DB->insert("fields", [NULL, "Name", "Your Name Here", "text"]);
+  if($insertField != 1) ThrowError("Error: Could not insert data to the 'fields' table");
 
-  $insertField = $DB->insert("Fields", [NULL, "About Me", "Use the Admin Dashboard to enter a little bit about you.", "textarea"]);
-  if($insertField != 1) ThrowError("Error: Could not insert data to the 'Fields' table");
+  $insertField = $DB->insert("fields", [NULL, "About Me", "Use the Admin Dashboard to enter a little bit about you.", "textarea"]);
+  if($insertField != 1) ThrowError("Error: Could not insert data to the 'fields' table");
 
   //Send a successful response
   header("HTTP/1.1 201 Created");
