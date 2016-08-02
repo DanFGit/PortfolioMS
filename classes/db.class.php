@@ -7,7 +7,7 @@ class DB {
   private $password   = "";
   private $database   = "portfolioms";
 
-  private $conn;
+  public $conn;
 
   function __construct() {
     //Connect to MySQL and Database

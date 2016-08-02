@@ -2,6 +2,7 @@
   session_start();
   require('../classes/pms.class.php');
   $errors = [];
+  $statuses = [];
 
   $PMS = new PMS();
 
@@ -11,15 +12,32 @@
   //If user is logged in, check if any forms have been submitted
   if($isLoggedIn){
     if(isset($_POST['createProject'])){
-      $creationStatus = $PMS->createProject($_POST['title'], $_POST['preview'], $_POST['body'], isset($_POST['visible']));
+      if($PMS->createProject($_POST['title'], $_POST['preview'], $_POST['body'], isset($_POST['visible'])))
+        $statuses[] = ["success", "Project Created!"];
+        else $statuses[] = ["error", "Could not create project, please try again or contact your system administrator."];
     } else if(isset($_GET['delete'])){
-      $deletionStatus = $PMS->deleteProject($_GET['delete']);
+      if($PMS->deleteProject($_GET['delete']))
+        $statuses[] = ["success", "Project Deleted!"];
+        else $statuses[] = ["error", "Could not delete project, please try again or contact your system administrator."];
     } else if(isset($_POST['editProject'])){
-      $editStatus = $PMS->editProject($_GET['edit'], $_POST['title'], $_POST['preview'], $_POST['body'], isset($_POST['visible']));
+      if($PMS->editProject($_GET['edit'], $_POST['title'], $_POST['preview'], $_POST['body'], isset($_POST['visible'])))
+        $statuses[] = ["success", "Project Edited!"];
+        else $statuses[] = ["error", "Could not edit project, please try again or contact your system administrator."];
     } else if(isset($_GET['hide'])){
-      $hideStatus = $PMS->hideProject($_GET['hide']);
+      if($PMS->hideProject($_GET['hide']))
+        $statuses[] = ["success", "Project is now hidden from the public!"];
+        else $statuses[] = ["error", "Could not hide project, please try again or contact your system administrator."];
     } else if(isset($_GET['show'])){
-      $showStatus = $PMS->showProject($_GET['show']);
+      if($PMS->showProject($_GET['show']))
+        $statuses[] = ["success", "Project is now visible to the public!"];
+        else $statuses[] = ["error", "Could not show project, please try again or contact your system administrator."];
+    } else if(isset($_POST['reorderProjects'])){
+      $error = 0;
+      foreach ($_POST['order'] as $id => $order)
+        if(!$PMS->reorderProject($id, $order)) $error++;
+      if($error == 0)
+        $statuses[] = ["success", "Projects reordered successfully!"];
+        else $statuses[] = ["error", "Could not reorder projects, please try again or contact your system administrator."];
     }
   }
 ?>
@@ -36,47 +54,18 @@
     <?php require('nav.php'); ?>
     <?php if($isLoggedIn) { ?>
       <main>
-        <?php if(isset($creationStatus) || isset($editStatus) || isset($deletionStatus) || isset($showStatus) || isset($hideStatus)){ ?>
+        <?php foreach ($statuses as $status) { ?>
           <section>
-            <?php
-            if(isset($creationStatus) && $creationStatus) {
-              echo "<p class='content success'>Project created successfully</p>";
-            } else if(isset($creationStatus) && !$creationStatus) {
-              echo "<p class='content error'>Project creation failed. Please try again.</p>";
-            }
-
-            if(isset($editStatus) && $editStatus) {
-              echo "<p class='content success'>Project edited successfully</p>";
-            } else if(isset($editStatus) && !$editStatus) {
-              echo "<p class='content error'>Project edit failed. Please try again.</p>";
-            }
-
-            if(isset($deletionStatus) && $deletionStatus) {
-              echo "<p class='content success'>Project deleted successfully</p>";
-            } else if(isset($deletionStatus) && !$deletionStatus) {
-              echo "<p class='content error'>Project deletion failed. Please try again.</p>";
-            }
-
-            if(isset($showStatus) && $showStatus) {
-              echo "<p class='content success'>Project is now visible to the public</p>";
-            } else if(isset($showStatus) && !$showStatus) {
-              echo "<p class='content error'>Project could not be shown. Please try again.</p>";
-            }
-
-            if(isset($hideStatus) && $hideStatus) {
-              echo "<p class='content success'>Project is now hidden from the public</p>";
-            } else if(isset($hideStatus) && !$hideStatus) {
-              echo "<p class='content error'>Project could not be hidden. Please try again.</p>";
-            }
-            ?>
+            <p class='content <?php echo $status[0]; ?>'><?php echo $status[1]; ?></p>
           </section>
         <?php } ?>
 
-        <?php if(!isset($_GET['edit'])) { ?>
+        <?php if(!isset($_GET['edit'])) {
+          $projectList = $PMS->getProjects(); ?>
           <section>
             <h2>Project List</h2>
             <div class="content">
-              <?php foreach($PMS->getProjects() as $project) { ?>
+              <?php foreach($projectList as $project) { ?>
                 <div class="project<?php if(!$project['visible']) echo " hidden"; ?>">
                   <a class="button" href="projects.php?edit=<?php echo $project['id']; ?>">Edit</a>
                   <?php if($project['visible']) { ?>
@@ -90,9 +79,24 @@
               <?php } ?>
             </div>
           </section>
+          <?php if(count($projectList) > 0){ ?>
+          <section>
+            <h2>Re-order Projects</h2>
+            <form id="reorderProjects" class="content" action="#" method="POST" autocomplete="off">
+              <p>You can reorder projects here. They are ordered lowest to highest, so 1 is the first project people see, 2 would be next, then 3, and so on. Two projects with the same number will be ordered randomly.</p><br>
+              <?php foreach($projectList as $project) { ?>
+                <input type="text" name="order[<?php echo $project['id']; ?>]" value="<?php echo $project['sort']; ?>" class="order">
+                <label for="order[<?php echo $project['id']; ?>]"><?php echo $project['title']; ?></label>
+                <br>
+              <?php } ?>
+              <br>
+              <input type="submit" class="submit" value="Re-order Projects" name="reorderProjects" />
+            </form>
+          </section>
+          <?php } ?>
           <section>
             <h2>Create New Project</h2>
-            <form id="createProject" class="content" action="#" method="POST">
+            <form id="createProject" class="content" action="#" method="POST" autocomplete="off">
               <label for="title">Project Title</label><br>
               <input type="text" name="title" /><br><br>
               <label for="preview">Short Description (shown on homepage)</label><br>

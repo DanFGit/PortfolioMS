@@ -100,7 +100,7 @@ class PMS {
     }
   }
   public function getProjects() {
-    $query = $this->DB->select("projects", "*", "1=1 ORDER BY id DESC");
+    $query = $this->DB->select("projects", "*", "1=1 ORDER BY sort ASC");
 
     if($query->rowCount()) {
       return $query->fetchAll();
@@ -109,7 +109,7 @@ class PMS {
     }
   }
   public function getPublicProjects() {
-    $query = $this->DB->select("projects", "*", "visible='1' ORDER BY id DESC");
+    $query = $this->DB->select("projects", "*", "visible='1' ORDER BY sort ASC");
 
     if($query->rowCount()) {
       return $query->fetchAll();
@@ -118,7 +118,7 @@ class PMS {
     }
   }
   public function createProject($title, $preview, $body, $visible) {
-    return $this->DB->insertSecure("projects", [NULL, $title, $preview, $body, $visible]);
+    return $this->DB->insertSecure("projects", [NULL, $title, $preview, $body, $visible, 0]);
   }
   public function deleteProject($id) {
     return $this->DB->delete("projects", "id='$id'");
@@ -131,5 +131,8 @@ class PMS {
   }
   public function editProject($id, $title, $preview, $body, $visible) {
     return $this->DB->updateSecure("projects", "title=?, preview=?, body=?, visible=?", [$title, $preview, $body, $visible], "id='$id'");
+  }
+  public function reorderProject($id, $order) {
+    return $this->DB->updateSecure("projects", "sort=?", [$order], "id='$id'");
   }
 }

@@ -14,7 +14,7 @@
   $createPersonalTable = $DB->createTable("personal", ["email", "password", "theme"], ["VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)"]);
   if($createPersonalTable != 1) ThrowError("Could not create the 'personal' table");
 
-  $createProjectsTable = $DB->createTable("projects", ["id", "title", "preview", "body", "visible"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN"]);
+  $createProjectsTable = $DB->createTable("projects", ["id", "title", "preview", "body", "visible", "sort"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255)", "TEXT", "MEDIUMTEXT", "BOOLEAN", "INT"]);
   if($createProjectsTable != 1) ThrowError("Could not create the 'projects' table");
 
   $createFieldsTable = $DB->createTable("fields", ["id", "name", "value", "type"], ["INT PRIMARY KEY AUTO_INCREMENT", "VARCHAR(255) UNIQUE", "TEXT", "ENUM('text','textarea','array')"]);

@@ -178,3 +178,11 @@ main > section > form select {
   width: calc(100% - 108px);
   padding: 0 4px;
 }
+
+#reorderProjects input.order {
+  width: 3rem;
+  text-align: center;
+  height: 2rem;
+  margin-right: 6px;
+  margin-bottom: 1px;
+}
