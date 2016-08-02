@@ -1,8 +1,3 @@
-<div id="errors">
-  <?php foreach ($errors as $error) {
-    echo "<p>$error</p>";
-  } ?>
-</div>
 <nav>
   <div id="logo">
     <a href="./">PortfolioMS<sup>BETA</sup></a>

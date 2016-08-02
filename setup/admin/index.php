@@ -1,7 +1,7 @@
 <?php
   session_start();
   require('../classes/pms.class.php');
-  $errors = [];
+  $statuses = [];
 
   $PMS = new PMS();
 
@@ -11,7 +11,7 @@
     if($login[0]){
       $_SESSION['user'] = $login[1];
     } else {
-      $errors[] = "Incorrect email or password. Please try again.";
+      $statuses[] = ["error", "Incorrect email or password. Please try again."];
     }
   }
 
@@ -31,6 +31,11 @@
     <?php require('nav.php'); ?>
     <?php if($isLoggedIn) { ?>
       <main>
+        <?php foreach ($statuses as $status) { ?>
+          <section>
+            <p class='content <?php echo $status[0]; ?>'><?php echo $status[1]; ?></p>
+          </section>
+        <?php } ?>
         <section>
           <h2>Admin Dashboard</h2>
           <p class="content">
@@ -42,6 +47,11 @@
       </main>
     <?php } else { ?>
       <main>
+        <?php foreach ($statuses as $status) { ?>
+          <section>
+            <p class='content <?php echo $status[0]; ?>'><?php echo $status[1]; ?></p>
+          </section>
+        <?php } ?>
         <section>
           <h2>Access Denied</h2>
           <p class="content">

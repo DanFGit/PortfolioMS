@@ -1,7 +1,6 @@
 <?php
   session_start();
   require('../classes/pms.class.php');
-  $errors = [];
 
   $PMS = new PMS();
 

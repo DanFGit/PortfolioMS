@@ -2,7 +2,6 @@
   session_start();
   require('../classes/pms.class.php');
   $statuses = [];
-  $errors = [];
 
   $PMS = new PMS();
 
