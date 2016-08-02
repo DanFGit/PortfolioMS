@@ -15,6 +15,7 @@
       foreach ($_POST['fields'] as $fieldType => $fieldsOfType) {
         if(substr($fieldType, 0, 5) == "array") $fieldType = "array";
         foreach ($fieldsOfType as $fieldName => $fieldValue) {
+          //TODO: If field name already exists, update it; else, create a new one
           $PMS->createField($fieldName, $fieldValue, $fieldType);
         }
       }

@@ -1,5 +1,6 @@
 /admin/*
 /uploads/*
+test.php
 
 # Ignore all themes except default
 /themes/*

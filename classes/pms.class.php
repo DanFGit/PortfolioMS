@@ -8,23 +8,40 @@ class PMS {
     $this->DB = new DB();
   }
 
-  //TODO: Tables may be created but PMS setup fails - better to check if
-  //      table is populated rather than exists
+  //Checks if PMS has been setup correctly
   public function isSetup() {
     return $this->DB->isSetup();
   }
 
-  //TODO: Make controlable through DB
+  //Gets the title to be shown on each webpage
   public function getHomeTitle() {
+    //TODO: Make controlable through DB //return $this->DB->select("personal", "title")->fetch()['title'];
     return "Homepage - Portfolio";
   }
 
-  //TODO: Grab selected theme name from DB
+  //Get/Set theme
   public function getTheme() {
     return $this->DB->select("personal", "theme")->fetch()['theme'];
   }
   public function setTheme($name) {
     return $this->DB->update("personal", "theme='$name'", "true");
+  }
+
+  //Verify Password
+  public function verifyPassword($email, $password) {
+    $storedPW = $this->DB->select("personal", "*", "email='$email'")->fetch()['password'];
+    return password_verify($password, $storedPW);
+  }
+
+  //Change Email - Returns 0 if fail, 1 if success
+  public function changeEmail($currentEmail, $newEmail) {
+    return $this->DB->updateSecure("personal", "email=?", [$newEmail], "email='$currentEmail'");
+  }
+
+  //Change Password
+  public function changePassword($email, $pass) {
+    $newPassword = password_hash($pass, PASSWORD_DEFAULT);
+    return $this->DB->updateSecure("personal", "password=?", [$newPassword], "email='$email'");
   }
 
   //Alias function for 'getAdminField'

@@ -100,8 +100,9 @@ class DB {
     }
   }
 
-  //Sanitises inputs as opposed to update()
-  //TODO: Move all UPDATE queries to this function
+  //TODO: Phase out support for update() due to security reasons
+  //Returns number of rows affected (including 0 if none)
+  //OR Returns PDOException error string
   public function updateSecure($tableName, $set, $values, $criteria = "true") {
     try {
       $sql = "UPDATE $tableName SET $set WHERE $criteria";
