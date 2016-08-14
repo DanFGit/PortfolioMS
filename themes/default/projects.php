@@ -11,16 +11,13 @@
       <h1><a href="index.php"><?php echo $PMS->get("Name"); ?></a></h1>
     </header>
 
-    <div class="content">
-      <h2>About Me</h2>
-      <?php echo $PMS->get("About Me"); ?>
-    </div>
-
     <?php foreach($PMS->getPublicProjects() as $project){ ?>
+
       <div class="content">
         <h2><a href="project.php?id=<?php echo $project['id']; ?>"><?php echo $project['title']; ?></a></h2>
         <?php echo nl2br($project['preview']); ?>
       </div>
+
     <?php } ?>
 
   </body>

@@ -16,7 +16,7 @@ class PMS {
   //Gets the title to be shown on each webpage
   public function getHomeTitle() {
     //TODO: Make controlable through DB //return $this->DB->select("personal", "title")->fetch()['title'];
-    return "Homepage - Portfolio";
+    return "Portfolio";
   }
 
   //Get/Set theme

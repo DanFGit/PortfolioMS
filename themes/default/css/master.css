@@ -8,6 +8,11 @@ html {
   font: 12px sans-serif;
 }
 
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 header {
   background: #ffdb53;
   text-align: center;
